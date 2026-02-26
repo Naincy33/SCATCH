@@ -1,20 +1,26 @@
 const mongoose = require("mongoose");
 
-// Connect to MongoDB
+// Connect MongoDB
 /*mongoose.connect("mongodb://127.0.0.1:27017/scatch")
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log(err));
 */
-const userSchema = new mongoose.Schema({
+
+// Owner Schema
+const ownerSchema = new mongoose.Schema({
+
     fullname: {
         type: String,
-        required: true
+        required: true,
+        minlength: 3,
+        trim: true
     },
 
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true
     },
 
     password: {
@@ -22,29 +28,19 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
-    cart: {
-        type: Array,
-        default: []
-    },
-
-    isadmin: {
-        type: Boolean,
-        default: false
-    },
-
-    orders: {
-        type: Array,
-        default: []
-    },
-
-    contact: {
-        type: Number
-    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+    }],
 
     picture: {
+        type: String
+    },
+
+    gstin: {
         type: String
     }
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Owner", ownerSchema);
