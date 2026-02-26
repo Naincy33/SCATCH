@@ -4,6 +4,9 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
+const indexRouter = require("./routes/index");
+app.use("/", indexRouter);
+
 // DB Connection
 const connectDB = require("./config/mongoose-connection");
 connectDB();
@@ -21,13 +24,42 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // View Engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views")); // explicitly set views folder
 
-// Base Route
+// ---------------- VIEW ROUTES ---------------- //
+
+// Home Page
 app.get("/", (req, res) => {
-    res.send("Server Running 🚀");
+    res.render("index");
 });
 
-// Routes
+// Shop Page
+app.get("/shop", (req, res) => {
+    res.render("shop");
+});
+
+// Cart Page
+app.get("/cart", (req, res) => {
+    res.render("cart");
+});
+
+// Admin Page
+app.get("/admin", (req, res) => {
+    res.render("admin");
+});
+
+// Create Product Page
+app.get("/createproducts", (req, res) => {
+    res.render("createproducts");
+});
+
+// Owner Login Page
+app.get("/owners/login", (req, res) => {
+    res.render("owner-login");
+});
+
+// ---------------- API ROUTES ---------------- //
+
 app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
